@@ -201,6 +201,7 @@ html[data-theme="dark"] .brand-dot,html[data-theme="dark"] .location-brand-total
 html[data-theme="dark"] .icon{color:var(--muted-foreground)}
 html[data-theme="dark"] .art-caption{color:var(--muted-foreground)}
 p,.nav-label,.breadcrumb,.header-right,.private,.workspace small,.profile small,.sales-trend-heading label{color:var(--muted-foreground)}
+.sidebar-bottom p{color:var(--muted-foreground)}
 .welcome .eyebrow{color:var(--muted-foreground)}
 .avatar,.initial{background:var(--secondary);color:var(--secondary-foreground)}
 .bike-art{color:var(--muted-foreground)}
