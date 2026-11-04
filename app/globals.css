@@ -198,6 +198,7 @@ html[data-theme="dark"] .brand-dot,html[data-theme="dark"] .location-brand-total
 html[data-theme="dark"] .theme-toggle:hover{background:var(--accent)}
 html[data-theme="dark"] .primary{background:var(--primary);border-color:var(--primary);color:var(--primary-foreground)}
 html[data-theme="dark"] .primary:hover{background:color-mix(in oklab,var(--primary) 88%,var(--foreground));border-color:color-mix(in oklab,var(--primary) 88%,var(--foreground))}
+html[data-theme="dark"] .icon:hover{background:var(--accent);color:var(--primary)}
 .welcome button{color:var(--primary)}
 .art-caption{color:var(--muted-foreground)}
 .trend-mode-toggle{background:var(--secondary);border-color:var(--border)}
