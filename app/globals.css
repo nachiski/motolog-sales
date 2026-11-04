@@ -192,3 +192,11 @@ html[data-theme="dark"] .trend-mode-toggle button{color:var(--muted-foreground)}
 html[data-theme="dark"] .trend-mode-toggle button.active{background:var(--primary);color:var(--primary-foreground)}
 html[data-theme="dark"] .modal h3,html[data-theme="dark"] .modal label,html[data-theme="dark"] .modal-footer>span{color:var(--muted-foreground)}
 html[data-theme="dark"] .brand-dot,html[data-theme="dark"] .location-brand-total{color:var(--primary)}
+.live-dot,.private span{background:var(--primary)}
+.welcome button{color:var(--primary)}
+.art-caption{color:var(--muted-foreground)}
+.trend-mode-toggle{background:var(--secondary);border-color:var(--border)}
+.trend-mode-toggle button{color:var(--muted-foreground)}
+.trend-mode-toggle button.active{background:var(--primary);color:var(--primary-foreground)}
+html[data-theme="dark"] .icon{color:var(--muted-foreground)}
+html[data-theme="dark"] .art-caption{color:var(--muted-foreground)}
