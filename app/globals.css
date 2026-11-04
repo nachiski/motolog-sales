@@ -200,3 +200,14 @@ html[data-theme="dark"] .brand-dot,html[data-theme="dark"] .location-brand-total
 .trend-mode-toggle button.active{background:var(--primary);color:var(--primary-foreground)}
 html[data-theme="dark"] .icon{color:var(--muted-foreground)}
 html[data-theme="dark"] .art-caption{color:var(--muted-foreground)}
+p,.nav-label,.breadcrumb,.header-right,.private,.workspace small,.profile small,.sales-trend-heading label{color:var(--muted-foreground)}
+.welcome .eyebrow{color:var(--muted-foreground)}
+.avatar,.initial{background:var(--secondary);color:var(--secondary-foreground)}
+.bike-art{color:var(--muted-foreground)}
+.orbit,.orbit:after,.monthly-controls,.table-footer{border-color:var(--border)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--ring)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--ring)}
+html[data-theme="dark"] .sales-trend-heading label,html[data-theme="dark"] .welcome .eyebrow,html[data-theme="dark"] .welcome p,html[data-theme="dark"] .monthly-summary p,html[data-theme="dark"] .monthly-controls label,html[data-theme="dark"] input::placeholder,html[data-theme="dark"] textarea::placeholder{color:var(--muted-foreground)}
+html[data-theme="dark"] .search input{color:var(--foreground)}
+html[data-theme="dark"] .orbit,html[data-theme="dark"] .orbit:after,html[data-theme="dark"] .monthly-controls{border-color:var(--border)}
+html[data-theme="dark"] .overlay{background:color-mix(in oklab,var(--foreground) 48%,transparent)}
