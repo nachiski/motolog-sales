@@ -49,6 +49,18 @@ Local preview is for development and uses the starter's local authentication sim
 
 GitHub stores the source code. It does not automatically move or redeploy the existing hosted application. Use the live application link above to access the existing sales records from Linux.
 
+## Separate Cloudflare deployment with Google sign-in
+
+The original ChatGPT-hosted Site remains separate. The production D1 database `motolog-sales-production` has been created, its schema applied, and the five current sales records copied with their original IDs. Its binding is set in `wrangler.cloudflare.jsonc`. To deploy the Worker after Cloudflare Access is active:
+
+```sh
+npm run deploy:cloudflare
+```
+
+The new Worker requires Cloudflare Access identity whenever `MOTOLOG_REQUIRE_ACCESS` is enabled. In Cloudflare Zero Trust, configure Google as an identity provider, create a Worker-level Access policy that allows only the intended Google account emails, and enable Access for the `motolog-sales-cloudflare` Worker before sharing its URL. Google OAuth credentials belong in Cloudflare settings; never commit the client secret. The OAuth callback URL for this account is `https://muddy-unit-53b3.cloudflareaccess.com/cdn-cgi/access/callback`.
+
+The live Sites D1 records are not part of this repository. Export them from the existing Site, import them into the new D1 database while preserving their IDs, and compare record counts before switching users. Keep the original Site and database available until the replacement is verified.
+
 ## Project structure
 
 - `app/page.tsx`: dashboard, sales form, filters, CSV export, and theme switch

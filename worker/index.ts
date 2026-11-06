@@ -2,8 +2,30 @@ import handler from "vinext/server/fetch-handler";
 import { runWithConnectorBinding } from "../lib/connector-context";
 import type { ConnectorBinding } from "../lib/connector-contract.mjs";
 
+type MotoLogEnv = Cloudflare.Env & {
+  MOTOLOG_REQUIRE_ACCESS?: string;
+};
+
+type MotoLogExecutionContext = ExecutionContext<{
+  CONNECTORS?: ConnectorBinding;
+}> & {
+  access?: {
+    getIdentity(): Promise<{ email?: string } | null>;
+  };
+};
+
 const worker = {
-  fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext<{ CONNECTORS?: ConnectorBinding }>) {
+  async fetch(request: Request, env: MotoLogEnv, ctx: MotoLogExecutionContext) {
+    if (env.MOTOLOG_REQUIRE_ACCESS === "true") {
+      const identity = await ctx.access?.getIdentity();
+      if (!identity?.email) {
+        return new Response("Inicia sesión con una cuenta autorizada para entrar a MotoLog.", {
+          status: 403,
+          headers: { "Cache-Control": "no-store" },
+        });
+      }
+    }
+
     let binding = ctx.props?.CONNECTORS;
     // Local preview emulates the same request-scoped capability. This branch and
     // the auxiliary service binding are absent from production builds.
