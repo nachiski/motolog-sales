@@ -1,75 +1,52 @@
 # MotoLog
 
-Private motorcycle sales tracker in Latin American Spanish, with monthly totals by brand and location, searchable sales records, CSV export, and a saved light/dark appearance preference.
+MotoLog is a motorcycle sales tracker in Spanish. This branch is the Vercel deployment target and uses Next.js, Google sign-in, Neon Postgres, Drizzle ORM, and minor-unit prices.
 
-Live application: https://motolog-sales-mvu8s2ht.tangymoth18.chatgpt.site/
+## Access model
 
-## Technology
+Users sign in with a Google account. For now, sign-up is open to any Google account with a verified email. Every signed-in user can read, add, edit, and delete all MotoLog sales. The API checks the Auth.js session and same-origin requests for every write. Do not enter sensitive sales data until the intended access policy is set.
 
-- React and TypeScript, using Vinext's Next.js-compatible application structure
-- Cloudflare Workers for the backend
-- Cloudflare D1 (SQLite) for durable sales records
-- Drizzle ORM and versioned SQL migrations
-- Sites hosting with platform-managed ChatGPT sign-in and private access
+## Required environment variables
 
-## Develop on Linux
+Set these in the Vercel project before the first production deployment:
 
-Install Git and Node.js 24 with npm. Clone this private repository using the URL shown by GitHub's **Code** button, then open a terminal in the cloned folder.
+- `AUTH_GOOGLE_ID`: OAuth client ID from Google Cloud Console.
+- `AUTH_GOOGLE_SECRET`: OAuth client secret from Google Cloud Console.
+- `AUTH_SECRET`: a cryptographically random secret (at least 32 characters).
+- `DATABASE_URL` or `POSTGRES_URL`: Neon Postgres connection string, injected by the Vercel Marketplace integration.
 
-Install the exact dependencies and build the app:
+In Google Cloud Console, add the production callback URL:
+
+```text
+https://<your-vercel-domain>/api/auth/callback/google
+```
+
+Do not commit OAuth credentials or database URLs. Configure them as encrypted Vercel environment variables.
+
+## Database
+
+The Vercel deployment uses an empty Neon Postgres database. Its schema migration is in `drizzle-pg/` and the Vercel build command applies pending migrations before building. The previous Sites-managed D1 database is left untouched and its sales records are not copied.
+
+To initialize or update a local database after configuring `DATABASE_URL`:
+
+```sh
+npm run db:migrate
+```
+
+## Develop
+
+Install Node.js 24 and dependencies, configure the required environment variables in `.env.local`, and run:
 
 ```sh
 npm ci
-npm run build
-```
-
-Initialize the separate local development database once:
-
-```sh
-node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_clear_winter_soldier.sql
-node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_price_minor_units.sql
-```
-
-Apply migrations in order. Migration `0001` adds `price_minor` and backfills it by rounding existing non-negative prices to the nearest cent; the legacy `price` column remains in place for rollback and older clients. The API uses the integer minor-unit value as authoritative and accepts prices with at most two decimal places for the currently supported currencies.
-
-Start the development server:
-
-```sh
 npm run dev
 ```
 
-Open the local URL printed by the server (normally http://localhost:5173).
-
-For a preview of a production build, use `npm start` after `npm run build`.
-
-A clean clone defaults to the portable execution profile on Linux. No Codex installation or Windows-only path is needed for these npm commands.
-
-## Databases and access
-
-The repository contains application code and schema migrations, not the live sales records. Local development starts with its own empty database. The existing hosted application continues using its existing production D1 database and private access policy.
-
-Local preview is for development and uses the starter's local authentication simulation. The hosted ChatGPT login/access gate is supplied by Sites; copying this code to another hosting service does not copy that gate or production database. Keep development previews on localhost.
-
-GitHub stores the source code. It does not automatically move or redeploy the existing hosted application. Use the live application link above to access the existing sales records from Linux.
-
-## Project structure
-
-- `app/page.tsx`: dashboard, sales form, filters, CSV export, and theme switch
-- `app/globals.css`: responsive styles and dark mode
-- `app/api/sales/route.ts`: sales API and validation
-- `lib/motorcycle-brands.ts`: allowed brands and locations
-- `db/schema.ts`: sales table definition
-- `drizzle/`: database schema migrations
-- `worker/`: Cloudflare Workers entry point
-- `.openai/hosting.json`: existing Sites project identity and logical database binding
-
-## Development checks
+The app requires a reachable Postgres database and Google OAuth credentials for sign-in. Typecheck, lint, tests, and production build can be run with:
 
 ```sh
 npx tsc --noEmit
+npm test
+npm run lint
 npm run build
 ```
-
-When adding database fields, generate a new migration using `npm run db:generate`. Apply new migrations to the local database in order; do not replay already applied migrations or modify applied migration history.
-
-The repository excludes dependencies, build output, credentials, local database state, and temporary files through `.gitignore`.

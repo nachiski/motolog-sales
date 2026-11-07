@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   checks:
-    name: Typecheck, lint, and build
+    name: Typecheck, test, lint, and build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -29,6 +29,9 @@ jobs:
 
       - name: Typecheck
         run: npx tsc --noEmit
+
+      - name: Test
+        run: npm test
 
       - name: Lint
         run: npm run lint
