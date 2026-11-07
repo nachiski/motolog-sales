@@ -27,7 +27,10 @@ Initialize the separate local development database once:
 
 ```sh
 node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_clear_winter_soldier.sql
+node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_price_minor_units.sql
 ```
+
+Apply migrations in order. Migration `0001` adds `price_minor` and backfills it by rounding existing non-negative prices to the nearest cent; the legacy `price` column remains in place for rollback and older clients. The API uses the integer minor-unit value as authoritative and accepts prices with at most two decimal places for the currently supported currencies.
 
 Start the development server:
 
